@@ -1,0 +1,1 @@
+export const KEY_LOCAL_STORAGE = 'JWT_VUE_LOCAL'
