@@ -13,3 +13,14 @@ export const ADD_USER = gql`
   }
 `
 // QUERIES
+// READ ALL USERS
+export const GET_ALL_USERS = gql`
+  query {
+    getUsers {
+      _id
+      email
+      name
+      createdAt
+    }
+  }
+`

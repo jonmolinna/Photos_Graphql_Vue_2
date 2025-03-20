@@ -10,3 +10,14 @@ export const AUTHENTICATION = gql`
   }
 `
 // QUERIES
+// GET PROFILE
+export const GET_PROFILE = gql`
+  query {
+    getProfile {
+      _id
+      name
+      email
+      createdAt
+    }
+  }
+`

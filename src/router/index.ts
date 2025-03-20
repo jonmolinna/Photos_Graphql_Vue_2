@@ -43,8 +43,6 @@ router.beforeEach((to, from, next) => {
   const needAuth = to.meta?.requireAuth
   const isAuthenticated = authService.isAuthenticated()
 
-  console.log('AQUI--- > ', to.name)
-
   if (needAuth && !isAuthenticated) next({ name: 'login' })
   else if (!needAuth && isAuthenticated && (to.name === 'login' || to.name === 'register'))
     next({ name: 'home' })
