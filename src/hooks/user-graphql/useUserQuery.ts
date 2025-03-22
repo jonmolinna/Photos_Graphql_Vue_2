@@ -12,5 +12,5 @@ export function useUserQuery(userId?: Ref<string>) {
     data.value = result.data?.getUsers as USER[]
   })
 
-  return { data, loading, load }
+  return { data, loading, load: async () => await load() }
 }

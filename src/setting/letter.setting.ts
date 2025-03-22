@@ -8,6 +8,21 @@ export function capitalizeLetter(str: string | null | undefined): string {
   return ''
 }
 
-export function charAtFirstLetter(str: string): string {
+export function charAtFirstLetter(str: string | null | undefined): string {
+  if (typeof str === 'string') {
+    const letter = str.split(' ')
+    return letter.length > 1
+      ? letter.length > 2
+        ? letter
+            .map((word) => word.charAt(0).toLocaleUpperCase())
+            .join('')
+            .substring(0, 2)
+        : letter.map((word) => word.charAt(0).toUpperCase()).join('')
+      : letter
+          .map((word) => word.toUpperCase())
+          .join('')
+          .substring(0, 2)
+  }
+
   return ''
 }

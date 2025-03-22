@@ -1,17 +1,32 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import AuthService from '@/services/AuthService'
 import RegisterView from '@/views/register/RegisterView.vue'
 import LoginView from '@/views/login/LoginView.vue'
-import HomeLayout from '@/views/home/HomeLayout.vue'
-import AuthService from '@/services/AuthService'
+import PostsView from '@/views/home/posts/PostsView.vue'
+import UploadView from '@/views/home/upload/UploadView.vue'
+import PostView from '@/views/home/post/PostView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: HomeLayout,
     meta: {
       requireAuth: true,
     },
+    children: [
+      {
+        path: '/',
+        component: PostsView,
+      },
+      {
+        path: '/p/:postId',
+        component: PostView,
+      },
+      {
+        path: '/upload',
+        component: UploadView,
+      },
+    ],
   },
   {
     path: '/login',

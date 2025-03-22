@@ -46,7 +46,7 @@ watch(
 )
 
 // CICLO DE VIDA
-onMounted(async () => {
-  await load()
+onMounted(() => {
+  load()
 })
 </script>
