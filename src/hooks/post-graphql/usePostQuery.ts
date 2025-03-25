@@ -1,4 +1,4 @@
-import { GET_POSTS } from '@/graphql/post.gql'
+import { GET_POST_BY_ID, GET_POSTS } from '@/graphql/post.gql'
 import type { POST } from '@/interface/post.interface'
 import { useLazyQuery } from '@vue/apollo-composable'
 import { ref, type Ref } from 'vue'
@@ -12,16 +12,26 @@ export function usePostQuery(postId?: Ref<string>) {
     data.value = result.data?.getPosts
   })
 
+  const {
+    loading: loadingById,
+    load: loadById,
+    onResult: onResultById,
+  } = useLazyQuery(GET_POST_BY_ID, () => ({
+    id: postId?.value,
+  }))
+
+  onResultById((result) => {
+    data.value = result.data?.getPost
+  })
+
   return {
     data,
-    loading: loadingAll,
-    load: async () => {
-      if (postId?.value) {
-        console.log('Hola a todos ---> ', postId.value)
-        // await load({ id: postId.value })
-      } else {
-        await loadAll()
-      }
+    loading: loadingAll || loadingById,
+    loadAll: async () => {
+      await loadAll()
+    },
+    loadById: async () => {
+      await loadById()
     },
   }
 }

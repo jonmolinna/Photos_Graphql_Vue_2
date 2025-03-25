@@ -2,14 +2,17 @@ import type { POST } from '@/interface/post.interface'
 import { defineStore } from 'pinia'
 
 export const usePostStore = defineStore('post', {
-  state: () => ({ posts: [] as POST[] }),
+  state: () => ({ posts: [] as POST[], id: '' as string }),
 
   actions: {
     addPosts(posts: POST[]) {
       this.posts = posts
     },
-    deletePost(post: POST) {
-      this.posts = this.posts.filter((item) => item._id !== post._id)
+    addIdPost(id: string) {
+      this.id = id
+    },
+    deleteIdPost() {
+      this.id = ''
     },
   },
 })

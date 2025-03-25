@@ -24,7 +24,7 @@ import { usePostStore } from '@/stores/post.store'
 
 // ESTADO Y VARIABLES REACTIVOS
 const storePost = usePostStore()
-const { loading, load, data } = usePostQuery()
+const { loading, loadAll, data } = usePostQuery()
 const { posts } = storeToRefs(storePost)
 
 watch(
@@ -37,6 +37,6 @@ watch(
 
 // CICLO DE VIDA DEL COMPONENTE
 onMounted(() => {
-  load()
+  loadAll()
 })
 </script>

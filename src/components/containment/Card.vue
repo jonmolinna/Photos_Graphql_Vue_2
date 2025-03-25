@@ -73,8 +73,9 @@ const storePost = usePostStore()
 const router = useRouter()
 
 const { profile } = storeToRefs(storeProfile)
-const { handleClickItems, openMenu, openConfirm, handleClickConfirm, isDelete } = useCardDialog()
-const { data, mutate } = usePostMutation(postId)
+const { handleClickItems, openMenu, openConfirm, handleClickConfirm, isDelete, isUpdate } =
+  useCardDialog()
+const { mutateDelete } = usePostMutation(postId)
 
 const props = defineProps({
   post: {
@@ -93,17 +94,18 @@ watch(
   () => isDelete.value,
   (newDelete) => {
     if (newDelete) {
-      mutate()
+      mutateDelete()
     }
   },
 )
 
 watch(
-  () => data.value,
-  (newData) => {
-    const data = newData as POST
-    console.log('-----> data ', data)
-    storePost.deletePost(data)
+  () => isUpdate.value,
+  (confirm) => {
+    if (confirm) {
+      storePost.addIdPost(postId.value)
+      router.push({ path: '/upload' })
+    }
   },
 )
 

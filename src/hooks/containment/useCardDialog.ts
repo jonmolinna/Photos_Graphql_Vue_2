@@ -5,6 +5,7 @@ export function useCardDialog() {
   const openMenu: Ref<boolean> = ref(false)
   const openConfirm: Ref<boolean> = ref(false)
   const isDelete: Ref<boolean> = ref(false)
+  const isUpdate: Ref<boolean> = ref(false)
 
   const handleClickItems = (item: string) => {
     switch (item) {
@@ -22,6 +23,8 @@ export function useCardDialog() {
         break
       }
       case MENU_ITEMS.ACTUALIZAR: {
+        isUpdate.value = true
+        openMenu.value = false
         break
       }
     }
@@ -38,5 +41,6 @@ export function useCardDialog() {
     openConfirm,
     handleClickConfirm,
     isDelete,
+    isUpdate,
   }
 }
