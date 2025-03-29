@@ -1,5 +1,10 @@
 <template>
-  <v-btn @click="async () => await mutate()" class="text-grey-darken-2" size="x-small">
+  <v-btn
+    @click="async () => await mutate()"
+    v-bind:loading="loading"
+    class="text-grey-darken-2"
+    size="x-small"
+  >
     <v-icon
       v-bind:icon="isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
       variant="text"
@@ -21,25 +26,16 @@ import type { LIKE_COMMENT } from '@/interface/like.interface'
 import { useProfileStore } from '@/stores/profile.store'
 
 // ESTADO Y VARIABLES REACTIVOS
-const commentId: Ref<string> = ref('')
 const likes: Ref<LIKE_COMMENT[]> = ref([])
 const storeProfile = useProfileStore()
 
 const { profile } = storeToRefs(storeProfile)
-const { mutate, data } = useLikeCommentMutation(commentId)
 
-const isLiked = computed({
-  get: () => likes.value.find((like) => like.user === profile.value?._id),
-  set: (value: LIKE_COMMENT) => {
-    likes.value.find((item) => item._id === value._id)
-      ? likes.value.filter((item) => item._id !== value._id)
-      : [...likes.value, value]
-  },
-})
+const isLiked = computed(() => likes.value.find((like) => like.user === profile.value?._id))
 
 //PROPS
 const props = defineProps({
-  comment_id: {
+  commentId: {
     type: String,
     required: true,
   },
@@ -48,19 +44,18 @@ const props = defineProps({
     type: Array as () => LIKE_COMMENT[],
     default: [],
   },
+  postId: {
+    type: String,
+    required: true,
+  },
 })
 
-watch(
-  () => props.comment_id,
-  (id) => {
-    commentId.value = id
-  },
-)
+const { mutate, loading } = useLikeCommentMutation(props.commentId, props.postId)
 
 watch(
-  () => data.value,
-  (newLike) => {
-    isLiked.value = newLike as LIKE_COMMENT
+  () => props.likes,
+  (data) => {
+    likes.value = data
   },
 )
 

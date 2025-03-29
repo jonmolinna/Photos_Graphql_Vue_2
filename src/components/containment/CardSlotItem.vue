@@ -16,7 +16,11 @@
           :loading="loading"
           @handleClick="() => (openConfirm = true)"
         />
-        <ButtonLikeComment v-bind:comment_id="comment._id" v-bind:likes="comment?.likes" />
+        <ButtonLikeComment
+          v-bind:commentId="comment._id"
+          v-bind:likes="comment.likes"
+          v-bind:postId="comment.post"
+        />
       </template>
     </v-toolbar>
     <p class="text-caption text-right text-grey-darken-1 mr-3">
@@ -71,7 +75,6 @@ watch(
   () => isDelete.value,
   () => {
     if (isDelete.value) {
-      console.log('VERIFICAAR ---> ', isDelete.value)
       mutate()
     }
   },

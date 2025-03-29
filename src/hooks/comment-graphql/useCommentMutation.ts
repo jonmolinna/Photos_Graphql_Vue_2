@@ -50,7 +50,7 @@ export function useCommentMutation(postId: string) {
   })
 
   onError((err) => {
-    console.log('ERROR -> ', err.graphQLErrors)
+    console.log('ERROR -> ', err.message)
   })
 
   return {

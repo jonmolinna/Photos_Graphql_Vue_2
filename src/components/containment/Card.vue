@@ -26,6 +26,15 @@
             v-on:click="() => router.push({ path: `/p/${post._id}` })"
           />
         </template>
+        <p class="text-caption text-right text-grey-darken-1 mr-3">
+          {{
+            format({
+              date: new Date(Number(post.createdAt)),
+              format: 'DD-MM-YYYY',
+              locale: 'es',
+            })
+          }}
+        </p>
       </v-toolbar>
     </v-card-item>
   </v-card>
@@ -50,6 +59,7 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import { format } from '@formkit/tempo'
 
 // IMPORTACIONES DE ARCHIVOS INTERNOS
 import Avatar from '../images/Avatar.vue'
