@@ -83,9 +83,10 @@ const router = useRouter()
 const { profile } = storeToRefs(storeProfile)
 const { id: postId } = storeToRefs(storePost)
 const { required, min5, max400 } = useValidateForm()
-const { mutateAdd, mutateUpdate, initialForm, form, validForm, errors, data } =
-  usePostMutation(postId)
-const { loading, loadById, data: post } = usePostQuery(postId)
+const { mutateAdd, mutateUpdate, initialForm, form, validForm, errors, data } = usePostMutation(
+  postId.value,
+)
+const { loading, load, data: post } = usePostQuery(postId.value)
 
 watch(
   () => data.value,
@@ -107,7 +108,7 @@ watch(
 // CICLO DE VIDA DEL COMPONENTE
 onMounted(() => {
   if (postId.value) {
-    loadById()
+    load()
   }
 })
 

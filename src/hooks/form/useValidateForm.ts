@@ -8,6 +8,7 @@ export function useValidateForm() {
   const maxLength20 = (v: string) => v.length <= 20 || 'Maximo 20 caracteres'
   const min5 = (v: string) => v.length > 5 || 'La publicación es demasiado corta'
   const max400 = (v: string) => v.length < 401 || 'La publicación es demasiado largo'
+  const max50 = (v: string) => v.length < 51 || 'La publicación es demasiado largo'
 
   return {
     required,
@@ -16,5 +17,6 @@ export function useValidateForm() {
     maxLength20,
     min5,
     max400,
+    max50,
   }
 }

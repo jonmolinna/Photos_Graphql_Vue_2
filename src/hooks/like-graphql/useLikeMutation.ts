@@ -3,7 +3,6 @@ import { useMutation } from '@vue/apollo-composable'
 import { ADD_LIKE_OR_DELETE_LIKE } from '@/graphql/like.gql'
 import type { LIKE_POST } from '@/interface/like.interface'
 import { GET_POSTS } from '@/graphql/post.gql'
-import type { POST } from '@/interface/post.interface'
 
 export function useLikeMutation(postId: Ref<string>) {
   const data: Ref<LIKE_POST | null> = ref(null)
@@ -12,6 +11,7 @@ export function useLikeMutation(postId: Ref<string>) {
     variables: {
       postId: postId.value,
     },
+    refetchQueries: [{ query: GET_POSTS }],
   }))
 
   onDone((result) => {

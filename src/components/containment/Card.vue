@@ -42,11 +42,12 @@
     text="¿Estas seguro de eliminar la publicación?"
     @handleClick="handleClickConfirm"
   />
+  <OverlaysFeed v-bind:overlay="loading" />
 </template>
 
 <script lang="ts" setup>
 // IMPORTACIONES DE BIBLIOTECAS EXTERNAS
-import { computed, onMounted, ref, watch, type Ref } from 'vue'
+import { computed, ref, watch, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 
@@ -57,16 +58,16 @@ import ButtonComment from './ButtonComment.vue'
 import ButtonMenuhorizontal from './ButtonMenuhorizontal.vue'
 import DialogMenu from './DialogMenu.vue'
 import DialogConfirm from './DialogConfirm.vue'
+import OverlaysFeed from '../feedback/OverlaysFeed.vue'
 import type { POST } from '@/interface/post.interface'
 import { capitalizeLetter } from '@/setting/letter.setting'
 import { MENU_ITEMS_CARD, type I_MENU_ITEMS } from '@/setting/post-card.data'
 import { useProfileStore } from '@/stores/profile.store'
 import { useCardDialog } from '@/hooks/containment/useCardDialog'
-import { usePostMutation } from '@/hooks/post-graphql/usePostMutation'
 import { usePostStore } from '@/stores/post.store'
+import { usePostMutationDelete } from '@/hooks/post-graphql/usePostMutationDelete'
 
 // ESTADO Y VARIABLES REACTIVOS
-const postId: Ref<string> = ref('')
 const menu_item: Ref<I_MENU_ITEMS[]> = ref(MENU_ITEMS_CARD)
 const storeProfile = useProfileStore()
 const storePost = usePostStore()
@@ -75,7 +76,6 @@ const router = useRouter()
 const { profile } = storeToRefs(storeProfile)
 const { handleClickItems, openMenu, openConfirm, handleClickConfirm, isDelete, isUpdate } =
   useCardDialog()
-const { mutateDelete } = usePostMutation(postId)
 
 const props = defineProps({
   post: {
@@ -83,6 +83,8 @@ const props = defineProps({
     type: Object as () => POST,
   },
 })
+
+const { loading, mutate, data } = usePostMutationDelete(props.post._id)
 
 const menu = computed(() =>
   menu_item.value.filter((item) =>
@@ -94,7 +96,7 @@ watch(
   () => isDelete.value,
   (newDelete) => {
     if (newDelete) {
-      mutateDelete()
+      mutate()
     }
   },
 )
@@ -103,14 +105,18 @@ watch(
   () => isUpdate.value,
   (confirm) => {
     if (confirm) {
-      storePost.addIdPost(postId.value)
+      storePost.addIdPost(props.post._id)
       router.push({ path: '/upload' })
     }
   },
 )
 
-// CICLO DE VIDA
-onMounted(() => {
-  postId.value = props.post._id
-})
+watch(
+  () => data.value,
+  (newData) => {
+    if (newData) {
+      router.push({ path: '/' })
+    }
+  },
+)
 </script>

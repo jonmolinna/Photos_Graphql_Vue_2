@@ -103,12 +103,29 @@ export const GET_POST_BY_ID = gql`
       user {
         _id
         name
-        email
       }
       likes {
         _id
-        user
         post
+        user
+      }
+      comments {
+        _id
+        comment
+        createdAt
+        post
+        user {
+          _id
+          name
+          email
+          createdAt
+        }
+        likes {
+          _id
+          comment
+          user
+          createdAt
+        }
       }
     }
   }

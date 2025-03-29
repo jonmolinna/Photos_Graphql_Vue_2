@@ -1,41 +1,18 @@
 import { ref, type Ref } from 'vue'
 import { useMutation } from '@vue/apollo-composable'
-import { ADD_POST, DELETE_POST, GET_POSTS, UDPATE_POST } from '@/graphql/post.gql'
+import { ADD_POST, GET_POSTS, UDPATE_POST } from '@/graphql/post.gql'
 import type { POST } from '@/interface/post.interface'
-import { da } from 'vuetify/locale'
 
 interface FORM {
   comment: string
 }
 
-export function usePostMutation(postId?: Ref<string>) {
+export function usePostMutation(postId?: string) {
   const data: Ref<POST | null> = ref(null)
   const errors: Ref<string[]> = ref([])
   const initialForm: Ref<FORM> = ref({ comment: '' })
   const form = ref()
   const validForm: Ref<boolean> = ref(false)
-
-  // DELETE
-  const { loading: loadingDelete, mutate: deletePost } = useMutation(DELETE_POST, () => ({
-    variables: {
-      postId: postId?.value,
-    },
-    update: (cache, { data: { deletePost } }) => {
-      let data = cache.readQuery<{ getPosts: POST[] }>({ query: GET_POSTS })
-
-      if (data) {
-        cache.writeQuery({
-          query: GET_POSTS,
-          data: {
-            ...data,
-            getPosts: data.getPosts.filter((post) => post._id !== deletePost._id),
-          },
-        })
-
-        cache.evict({ id: `PostType:${deletePost._id}` })
-      }
-    },
-  }))
 
   // ADD
   const {
@@ -90,7 +67,7 @@ export function usePostMutation(postId?: Ref<string>) {
       input: {
         comment: initialForm.value.comment.trim(),
       },
-      postId: postId?.value,
+      postId: postId,
     },
   }))
 
@@ -114,7 +91,7 @@ export function usePostMutation(postId?: Ref<string>) {
   })
 
   return {
-    loading: loadingDelete || loadingAdd || loadingUpdate,
+    loading: loadingAdd || loadingUpdate,
     data,
     initialForm,
     form,
@@ -122,9 +99,6 @@ export function usePostMutation(postId?: Ref<string>) {
     errors,
     mutateAdd: async () => {
       await addPost()
-    },
-    mutateDelete: async () => {
-      await deletePost()
     },
     mutateUpdate: async () => {
       await mutateUpdate()

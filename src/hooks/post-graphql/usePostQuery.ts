@@ -1,37 +1,35 @@
-import { GET_POST_BY_ID, GET_POSTS } from '@/graphql/post.gql'
+import { GET_POST_BY_ID } from '@/graphql/post.gql'
 import type { POST } from '@/interface/post.interface'
 import { useLazyQuery } from '@vue/apollo-composable'
 import { ref, type Ref } from 'vue'
 
-export function usePostQuery(postId?: Ref<string>) {
-  const data: Ref<Array<POST> | POST | null> = ref(null)
+export function usePostQuery(postId: string) {
+  const data: Ref<POST | null> = ref(null)
+  const errors: Ref<Array<string>> = ref([])
 
-  const { loading: loadingAll, load: loadAll, onResult: onResultAll } = useLazyQuery(GET_POSTS)
-
-  onResultAll((result) => {
-    data.value = result.data?.getPosts
-  })
-
-  const {
-    loading: loadingById,
-    load: loadById,
-    onResult: onResultById,
-  } = useLazyQuery(GET_POST_BY_ID, () => ({
-    id: postId?.value,
+  const { loading, load, onResult, onError } = useLazyQuery(GET_POST_BY_ID, () => ({
+    id: postId,
   }))
 
-  onResultById((result) => {
+  onResult((result) => {
     data.value = result.data?.getPost
   })
 
+  onError((error) => {
+    if (error.graphQLErrors && error.graphQLErrors[0] && error.graphQLErrors[0].message) {
+      const err = error.graphQLErrors[0].message
+      errors.value = error as unknown as Array<string>
+    } else {
+      errors.value.push(error.message)
+    }
+  })
+
   return {
+    loading,
     data,
-    loading: loadingAll || loadingById,
-    loadAll: async () => {
-      await loadAll()
-    },
-    loadById: async () => {
-      await loadById()
+    errors,
+    load: async () => {
+      await load()
     },
   }
 }
