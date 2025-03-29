@@ -5,17 +5,18 @@ import LoginView from '@/views/login/LoginView.vue'
 import PostsView from '@/views/home/posts/PostsView.vue'
 import UploadView from '@/views/home/upload/UploadView.vue'
 import PostView from '@/views/home/post/PostView.vue'
+import NotFoundView from '@/views/home/not-found/NotFoundView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'home',
     meta: {
       requireAuth: true,
     },
     children: [
       {
         path: '/',
+        name: 'home',
         component: PostsView,
       },
       {
@@ -25,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/upload',
         component: UploadView,
+      },
+      {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFoundView,
       },
     ],
   },
@@ -52,16 +58,23 @@ const router = createRouter({
 })
 
 // GUARD
-router.beforeEach((to, from, next) => {
+router
+
+router.beforeEach(async (to, from, next) => {
   const authService = new AuthService()
 
   const needAuth = to.meta?.requireAuth
   const isAuthenticated = authService.isAuthenticated()
 
-  if (needAuth && !isAuthenticated) next({ name: 'login' })
-  else if (!needAuth && isAuthenticated && (to.name === 'login' || to.name === 'register'))
+  if (!needAuth && isAuthenticated && (to.name === 'login' || to.name === 'register')) {
     next({ name: 'home' })
-  else next()
+  } else if (!isAuthenticated && to && !['login', 'register'].includes(to.name?.toString() ?? '')) {
+    next({ name: 'login' })
+  } else if (needAuth && !isAuthenticated) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
 })
 
 export default router

@@ -3,7 +3,7 @@ import { useLazyQuery } from '@vue/apollo-composable'
 import type { USER } from '@/interface/user.interface'
 import { GET_ALL_USERS } from '@/graphql/user.gql'
 
-export function useUserQuery(userId?: Ref<string>) {
+export function useUserQuery() {
   const data: Ref<USER[] | USER | null> = ref(null)
 
   const { load, loading, onResult } = useLazyQuery(GET_ALL_USERS)

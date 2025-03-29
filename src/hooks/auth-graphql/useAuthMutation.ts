@@ -1,5 +1,6 @@
 import { AUTHENTICATION } from '@/graphql/auth.gql'
 import { useMutation } from '@vue/apollo-composable'
+import type { RefSymbol } from '@vue/reactivity'
 import { ref, type Ref } from 'vue'
 
 interface FORM {
@@ -25,7 +26,10 @@ export function useAuthMutation() {
   }))
 
   onDone((result) => {
-    data.value = result.data?.login?.access_token as string
+    if (result.data && result.data?.login && result.data?.login?.access_token) {
+      data.value = result.data?.login?.access_token as string
+    }
+
     form.value.reset()
   })
 

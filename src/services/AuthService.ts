@@ -2,8 +2,9 @@ import { KEY_LOCAL_STORAGE } from '@/constants'
 
 class AuthService {
   public getToken(): string | null {
-    const token = localStorage.getItem(KEY_LOCAL_STORAGE)
-    return token
+    const token = localStorage.getItem(KEY_LOCAL_STORAGE) as string
+
+    return token ? token : null
   }
 
   public isAuthenticated(): boolean {

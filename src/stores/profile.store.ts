@@ -12,5 +12,8 @@ export const useProfileStore = defineStore('profile', {
     addProfile(profile: USER) {
       this.profile = profile
     },
+    resetProfile() {
+      this.profile = null
+    },
   },
 })
