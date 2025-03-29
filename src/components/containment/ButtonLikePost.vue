@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="async () => await mutate()">
+  <v-btn @click="async () => await mutate()" v-bind:loading="loading">
     <v-icon
       v-bind:icon="isLiked ? 'mdi-heart' : 'mdi-heart-outline'"
       variant="text"
@@ -23,42 +23,33 @@ import { useLikeMutation } from '@/hooks/like-graphql/useLikeMutation'
 
 // ESTADO Y VARIABLES REACTIVOS
 const likes: Ref<LIKE_POST[]> = ref([])
-const postId: Ref<string> = ref('')
 const storeProfile = useProfileStore()
-
-const { data, mutate } = useLikeMutation(postId)
-const { profile } = storeToRefs(storeProfile)
 
 const props = defineProps({
   likes: {
     required: true,
     type: Array as () => LIKE_POST[],
   },
-  post_id: {
+  postId: {
     required: true,
     type: String,
   },
 })
 
-const isLiked = computed({
-  get: () => likes.value.find((like) => like.user === profile.value?._id),
-  set: (value: LIKE_POST) => {
-    likes.value = likes.value.find((item) => item._id === value._id)
-      ? likes.value.filter((item) => item._id !== value._id)
-      : [...likes.value, value]
-  },
-})
+const { mutate, loading } = useLikeMutation(props.postId)
+const { profile } = storeToRefs(storeProfile)
+
+const isLiked = computed(() => likes.value.find((like) => like.user === profile.value?._id))
 
 watch(
-  () => data.value,
-  (newLike) => {
-    isLiked.value = newLike as LIKE_POST
+  () => props.likes,
+  (data) => {
+    likes.value = data
   },
 )
 
 // CICLO DE VIDA
 onMounted(() => {
   likes.value = props.likes
-  postId.value = props.post_id
 })
 </script>

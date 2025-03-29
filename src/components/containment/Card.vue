@@ -20,7 +20,7 @@
     <v-card-item>
       <v-toolbar>
         <template v-slot:prepend>
-          <ButtonLikePost v-bind:likes="post.likes" v-bind:post_id="post._id" />
+          <ButtonLikePost v-bind:likes="post.likes" v-bind:postId="post._id" />
           <ButtonComment
             v-bind:comments="post.comments.length"
             v-on:click="() => router.push({ path: `/p/${post._id}` })"
