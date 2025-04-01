@@ -30,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
         component: UploadView,
       },
       {
-        path: '/messages',
+        path: '/m/users',
         component: MessagesView,
       },
       {

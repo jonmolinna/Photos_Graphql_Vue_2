@@ -10,7 +10,7 @@
         <CardSlots v-bind:comments="comments" />
       </div>
       <v-card v-else class="mx-auto bg-grey-lighten-3 w-100" max-width="500">
-        <AlertFeed type="error" />
+        <AlertFeed type="error" color="error" icon="mdi-alert-circle-outline" />
       </v-card>
     </div>
   </HomeLayout>

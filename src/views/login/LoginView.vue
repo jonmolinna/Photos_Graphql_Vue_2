@@ -72,9 +72,8 @@ watch(
     if (data.value) {
       const token = data.value as string
       localStorage.setItem(KEY_LOCAL_STORAGE, token)
+      router.push({ path: '/' })
     }
-
-    router.push({ path: '/' })
   },
 )
 </script>

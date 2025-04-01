@@ -22,7 +22,7 @@
       />
       <v-list-item
         v-if="smAndDown"
-        v-on:click="() => router.push({ path: '/messages' })"
+        v-on:click="() => router.push({ path: '/m/users' })"
         prepend-icon="mdi-account-group-outline"
         title="Chats"
         value="chats"
