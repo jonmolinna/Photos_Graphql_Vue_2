@@ -6,6 +6,8 @@ import PostsView from '@/views/home/posts/PostsView.vue'
 import UploadView from '@/views/home/upload/UploadView.vue'
 import PostView from '@/views/home/post/PostView.vue'
 import NotFoundView from '@/views/home/not-found/NotFoundView.vue'
+import MessagesView from '../views/home/messages/MessagesView.vue'
+import MessageView from '@/views/home/message/MessageView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -26,6 +28,14 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/upload',
         component: UploadView,
+      },
+      {
+        path: '/messages',
+        component: MessagesView,
+      },
+      {
+        path: '/m/:userId',
+        component: MessageView,
       },
       {
         path: '/:pathMatch(.*)*',

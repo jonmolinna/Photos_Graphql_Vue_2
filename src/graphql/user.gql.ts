@@ -24,3 +24,15 @@ export const GET_ALL_USERS = gql`
     }
   }
 `
+
+// GET USER BY ID
+export const GET_USER_BY_ID = gql`
+  query getUser($id: ID!) {
+    getUser(id: $id) {
+      _id
+      name
+      email
+      createdAt
+    }
+  }
+`

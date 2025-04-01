@@ -20,7 +20,13 @@
         title="Crear"
         value="crear"
       />
-      <v-list-item prepend-icon="mdi-account-group-outline" title="Chats" value="chats" />
+      <v-list-item
+        v-if="smAndDown"
+        v-on:click="() => router.push({ path: '/messages' })"
+        prepend-icon="mdi-account-group-outline"
+        title="Chats"
+        value="chats"
+      />
       <v-list-item
         v-on:click="handleLogout"
         prepend-icon="mdi-exit-to-app"

@@ -10,9 +10,11 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import '@mdi/font/css/materialdesignicons.css'
 
 // Graphql
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { ApolloClient, createHttpLink, InMemoryCache, split } from '@apollo/client/core'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 import { setContext } from '@apollo/client/link/context'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { getMainDefinition } from '@apollo/client/utilities'
 
 // COMPONENTS
 import App from './App.vue'
@@ -27,6 +29,13 @@ const httpLink = createHttpLink({
   uri: 'http://localhost:3000/graphql',
 })
 
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:3000/graphql`,
+  options: {
+    reconnect: true,
+  },
+})
+
 const authLink = setContext((_, { headers }) => {
   const authService = new AuthService()
   const token = authService.getToken()
@@ -39,10 +48,21 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+const link = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query)
+    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+  },
+  wsLink,
+  // httpLink
+  authLink.concat(httpLink),
+)
+
 const cache = new InMemoryCache()
 
 const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink),
+  // link: authLink.concat(httpLink),
+  link,
   cache,
 })
 
