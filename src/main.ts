@@ -26,11 +26,13 @@ const pinia = createPinia()
 
 // GRAPHQL CONFIG
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3000/graphql',
+  // uri: 'http://localhost:3000/graphql',
+  uri: 'https://photos-graphql-nestjs-vue.onrender.com/graphql',
 })
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:3000/graphql`,
+  // uri: `ws://localhost:3000/graphql`,
+  uri: 'wss://photos-graphql-nestjs-vue.onrender.com/graphql',
   options: {
     reconnect: true,
   },
